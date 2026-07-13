@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안녕하세요! 김민준입니다.</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Gowun Dodum (둥글둥글하고 차분한 폰트) & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Musical and UI Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Configuration for customized palette -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Gowun Dodum', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        background: {
+                            light: '#FAF9F6', // 눈이 편안하고 차분한 무광 아이보리
+                            dark: '#0B0D10'   // 빔프로젝터에서도 선명하면서 자극 없는 차콜블랙
+                        },
+                        cardBg: {
+                            light: '#FFFFFF',
+                            dark: '#12151B'
+                        },
+                        primary: {
+                            light: '#1F2937',
+                            dark: '#F3F4F6'
+                        },
+                        secondary: {
+                            light: '#4B5563',
+                            dark: '#9CA3AF'
+                        },
+                        accent: {
+                            light: '#6366F1', // 우아한 인디고 블루
+                            dark: '#818CF8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 부드러운 다크/라이트모드 전역 트랜지션 */
+        *, *::before, *::after {
+            transition: background-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        border-color 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        color 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            /* 데스크탑 한정 기본 커서 대체 */
+            cursor: none; 
+        }
+
+        /* 스크롤바 커스터마이징 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0B0D10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D1D5DB;
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #2D3139;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF;
+        }
+
+        /* 3D 틸트 원근감 효과용 */
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 드로우 타이틀 언더라인 애니메이션 */
+        .drawing-underline {
+            position: relative;
+            display: inline-block;
+        }
+        .drawing-underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 0;
+            height: 2px;
+            background-color: #6366F1;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dark .drawing-underline::after {
+            background-color: #818CF8;
+        }
+        .reveal-element.active .drawing-underline::after {
+            width: 100%;
+        }
+
+        /* 은은하게 맥박뛰듯 플로팅하는 애니메이션 (One More Thing...) */
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+        .float-subtle {
+            animation: subtleFloat 3.5s ease-in-out infinite;
+        }
+
+        /* 모바일 친화형 커서 미노출 처리 */
+        @media (max-width: 1024px) {
+            body {
+                cursor: auto !important;
+            }
+            #custom-cursor, #custom-cursor-dot {
+                display: none !important;
+            }
+        }
+
+        /* 커스텀 마우스 커서 스타일 */
+        #custom-cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        }
+        #custom-cursor-dot {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background-color: #6366F1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            transition: width 0.2s, height 0.2s, border-radius 0.2s, background-color 0.2s;
+        }
+
+        /* 스크롤 감지 에니메이션 */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 오프닝 순차 등장 연출용 (Staggered Intro) */
+        .stagger-in {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .loaded .stagger-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 타이틀 타이핑 커서 깜빡임 효과 */
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            animation: cursorBlink 0.8s infinite;
+        }
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-background-light text-primary-light dark:bg-background-dark dark:text-primary-dark font-sans selection:bg-indigo-100 dark:selection:bg-indigo-950">
+
+    <!-- 데스크탑용 고도화된 커스텀 음악 마우스 커서 -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-dot"></div>
+
+    <!-- 스크롤 진행률 (Scroll Progress Bar) -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-[3.5px] bg-gradient-to-r from-indigo-500 via-purple-400 to-teal-400 z-50 transition-all duration-75" style="width: 0%"></div>
+
+    <!-- 은은한 클래식 입자/도트 배경용 HTML5 Canvas -->
+    <canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40 dark:opacity-20"></canvas>
+
+    <!-- 다크모드 미세 페럴랙스 그라데이션 원형들 -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div id="parallax-blob-1" class="absolute w-[320px] h-[320px] rounded-full bg-indigo-200/30 dark:bg-indigo-900/10 filter blur-[90px] top-1/4 left-[-80px] transition-transform duration-700 ease-out"></div>
+        <div id="parallax-blob-2" class="absolute w-[360px] h-[360px] rounded-full bg-teal-200/20 dark:bg-teal-900/10 filter blur-[100px] bottom-1/4 right-[-100px] transition-transform duration-700 ease-out"></div>
+    </div>
+
+    <!-- 네비게이션 헤더 -->
+    <header class="w-full max-w-4xl mx-auto px-6 py-5 md:py-7 flex justify-between items-center z-40 relative">
+        <div class="text-lg font-bold tracking-tight text-primary-light dark:text-primary-dark select-none interactive-target">KMJ</div>
+        
+        <div class="flex items-center space-x-4">
+            <nav class="flex space-x-5 text-sm text-secondary-light dark:text-secondary-dark font-medium">
+                <a href="#about" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors interactive-target" data-t="nav_about">소개</a>
+                <a href="#music" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors interactive-target" data-t="nav_music">음악</a>
+                <a href="#traits" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors interactive-target" data-t="nav_traits">특성</a>
+                <a href="#guestbook" class="hover:text-primary-light dark:hover:text-primary-dark transition-colors interactive-target" data-t="nav_guest">방명록</a>
+            </nav>
+            
+            <div class="flex items-center space-x-2 border-l border-gray-200 dark:border-gray-800 pl-4">
+                <!-- 다자언어 전환 버튼 (Language Switcher) -->
+                <button id="lang-toggle" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-gray-100 dark:bg-gray-800 text-secondary-light dark:text-secondary-dark hover:text-accent-light dark:hover:text-accent-dark transition-all active:scale-95 border border-gray-200/50 dark:border-gray-700/50 interactive-target">
+                    EN
+                </button>
+
+                <!-- 라이트/다크 모드 토글 -->
+                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 text-secondary-light dark:text-secondary-dark hover:text-amber-500 dark:hover:text-indigo-400 transition-all active:scale-90 interactive-target" aria-label="테마 전환">
+                    <svg id="theme-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <svg id="theme-moon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 히어로 섹션 (Hero Section) -->
+    <section id="hero" class="relative flex-grow flex items-center justify-center py-16 md:py-28 px-6 z-10">
+        <div class="max-w-3xl text-center md:text-left w-full space-y-5">
+            <span class="stagger-in inline-block text-[11px] uppercase tracking-wider text-accent-light dark:text-accent-dark font-bold bg-indigo-50/70 dark:bg-indigo-950/40 px-3.5 py-1.5 rounded-full border border-indigo-100/40 dark:border-indigo-900/30" style="transition-delay: 150ms;" data-t="hero_badge">
+                Personal Portfolio
+            </span>
+            
+            <!-- 타이핑 효과가 적용될 역동적인 제목 -->
+            <div class="stagger-in min-h-[4rem] md:min-h-[6rem] flex items-center justify-center md:justify-start" style="transition-delay: 300ms;">
+                <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-primary-light dark:text-primary-dark leading-tight">
+                    <span id="hero-title-text"></span><span class="typing-cursor text-accent-light dark:text-accent-dark font-normal">|</span>
+                </h1>
+            </div>
+
+            <p class="stagger-in text-sm md:text-base text-secondary-light dark:text-secondary-dark leading-relaxed max-w-2xl font-light" style="transition-delay: 500ms;" data-t="hero_sub">
+                조급함 대신 묵묵함을 선택하고, 한 걸음씩 앞으로 나아갑니다. 당장 눈에 보이지 않더라도 시간이 쌓여 만드는 단단한 신뢰를 믿습니다.
+            </p>
+
+            <div class="stagger-in pt-4 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3" style="transition-delay: 650ms;">
+                <a href="#about" class="interactive-target w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 text-xs font-semibold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-sm hover:shadow-lg text-center" data-t="btn_profile">
+                    프로필 보기
+                </a>
+                <a href="#reveal" class="interactive-target w-full sm:w-auto px-6 py-3 border border-gray-300 dark:border-gray-700 text-secondary-light dark:text-secondary-dark hover:text-primary-light dark:hover:text-primary-dark hover:border-gray-400 dark:hover:border-gray-500 text-xs font-semibold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all text-center" data-t="btn_closer">
+                    가까워지기
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 소개 섹션 (About Section) -->
+    <section id="about" class="reveal-element py-20 bg-white/70 dark:bg-gray-900/50 border-y border-gray-100 dark:border-gray-900 backdrop-blur-md z-10">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
+                
+                <!-- 왼쪽 정보 카드 -->
+                <div class="md:col-span-5 space-y-5">
+                    <h2 class="text-xl font-bold text-primary-light dark:text-primary-dark drawing-underline pb-1" data-t="sec_about">기본 소개</h2>
+                    <p class="text-xs md:text-sm text-secondary-light dark:text-secondary-dark leading-relaxed" data-t="sec_about_sub">
+                        화려하게 드러내기보다, 조용히 책임을 다하는 것을 편안하게 생각합니다. 본가는 마산, 지금은 가까운곳에서 자취중입니다!
+                    </p>
+                    
+                    <div class="space-y-1.5 pt-2 text-xs md:text-sm text-secondary-light dark:text-secondary-dark">
+                        <div class="flex items-center space-x-3 py-2.5 border-b border-gray-100 dark:border-gray-800">
+                            <span class="w-16 font-semibold text-primary-light dark:text-primary-dark" data-t="profile_name_label">이름</span>
+                            <span data-t="profile_name_val">김민준 (00년생)</span>
+                        </div>
+                        <div class="flex items-center space-x-3 py-2.5 border-b border-gray-100 dark:border-gray-800">
+                            <span class="w-16 font-semibold text-primary-light dark:text-primary-dark" data-t="profile_loc_label">사는 곳</span>
+                            <span data-t="profile_loc_val">경남 마산</span>
+                        </div>
+                        <div class="flex items-center space-x-3 py-2.5 border-b border-gray-100 dark:border-gray-800">
+                            <span class="w-16 font-semibold text-primary-light dark:text-primary-dark" data-t="profile_mbti_label">성향</span>
+                            <span data-t="profile_mbti_val">INTP (논리적인 사색가)</span>
+                        </div>
+                        <div class="flex items-center space-x-3 py-2.5 border-b border-gray-100 dark:border-gray-800">
+                            <span class="w-16 font-semibold text-primary-light dark:text-primary-dark" data-t="profile_major_label">전공</span>
+                            <span data-t="profile_major_val">클래식 피아노</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오른쪽 전공 소개 및 플레이리스트 -->
+                <div id="music" class="md:col-span-7 bg-[#FAF9F6]/50 dark:bg-cardBg-dark p-6 rounded-2xl border border-gray-100 dark:border-gray-800/80 shadow-sm space-y-5">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-md font-bold text-primary-light dark:text-primary-dark" data-t="sec_music">전공과 음악 이야기</h3>
+                        <i class="fa-solid fa-music text-indigo-400 dark:text-indigo-500"></i>
+                    </div>
+                    
+                    <p class="text-xs md:text-sm text-secondary-light dark:text-secondary-dark leading-relaxed" data-t="sec_music_sub">
+                        클래식 피아노를 전공하며 수없이 반복하는 연습 속에서 꾸준함을 몸으로 배웠습니다. 아래는 제가 평소에 깊이 공감하고 즐겨 듣는 피아노 연주들입니다. 마우스로 누르면 음악을 바로 들으실 수 있습니다.
+                    </p>
+
+                    <!-- 음악 리스트 (Playlist Links Component) -->
+                    <div class="space-y-2">
+                        <!-- 곡 1 -->
+                        <a href="https://youtu.be/I_AX4R-d29o?si=OLaNt1F0XJcJ_QeR" target="_blank" class="interactive-target flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-sm transition-all duration-300 group">
+                            <div class="flex items-center space-x-3 truncate">
+                                <span class="text-xs text-indigo-500 font-bold w-4">01</span>
+                                <div class="truncate">
+                                    <h4 class="text-xs font-bold text-primary-light dark:text-primary-dark group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">Mozart: Piano Sonata No.16, K.545</h4>
+                                    <p class="text-[10px] text-gray-400 truncate">Simple but profound elegance</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 shrink-0">
+                                <span class="text-[10px] text-gray-400">11:15</span>
+                                <i class="fa-regular fa-circle-play text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </a>
+                        
+                        <!-- 곡 2 -->
+                        <a href="https://youtu.be/frxT2qB1POQ?si=PrEnL6C1cwcl4xH2" target="_blank" class="interactive-target flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-sm transition-all duration-300 group">
+                            <div class="flex items-center space-x-3 truncate">
+                                <span class="text-xs text-indigo-500 font-bold w-4">02</span>
+                                <div class="truncate">
+                                    <h4 class="text-xs font-bold text-primary-light dark:text-primary-dark group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">J.S. Bach: Prelude in C Major, BWV 846</h4>
+                                    <p class="text-[10px] text-gray-400 truncate">Well-Tempered Clavier - Systematic flow</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 shrink-0">
+                                <span class="text-[10px] text-gray-400">02:12</span>
+                                <i class="fa-regular fa-circle-play text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </a>
+
+                        <!-- 곡 3 -->
+                        <a href="https://youtu.be/sbTVZMJ9Z2I?si=J_OpZVc1glRWBBVQ" target="_blank" class="interactive-target flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-sm transition-all duration-300 group">
+                            <div class="flex items-center space-x-3 truncate">
+                                <span class="text-xs text-indigo-500 font-bold w-4">03</span>
+                                <div class="truncate">
+                                    <h4 class="text-xs font-bold text-primary-light dark:text-primary-dark group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">Beethoven: Moonlight Sonata (1st Mov)</h4>
+                                    <p class="text-[10px] text-gray-400 truncate">Calming waves in the quiet night</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 shrink-0">
+                                <span class="text-[10px] text-gray-400">06:05</span>
+                                <i class="fa-regular fa-circle-play text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </a>
+
+                        <!-- 곡 4 -->
+                        <a href="https://youtu.be/97_VJve7UVc?si=r6695IUj9Mxsti4E" target="_blank" class="interactive-target flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-sm transition-all duration-300 group">
+                            <div class="flex items-center space-x-3 truncate">
+                                <span class="text-xs text-indigo-500 font-bold w-4">04</span>
+                                <div class="truncate">
+                                    <h4 class="text-xs font-bold text-primary-light dark:text-primary-dark group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">Debussy: Clair de Lune (달빛)</h4>
+                                    <p class="text-[10px] text-gray-400 truncate">Impressionistic shimmer of starlight</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 shrink-0">
+                                <span class="text-[10px] text-gray-400">05:32</span>
+                                <i class="fa-regular fa-circle-play text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </a>
+
+                        <!-- 곡 5 -->
+                        <a href="https://youtu.be/9E6b3swbnWg?si=kc5DaGUIjbJc7wVj" target="_blank" class="interactive-target flex items-center justify-between p-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-sm transition-all duration-300 group">
+                            <div class="flex items-center space-x-3 truncate">
+                                <span class="text-xs text-indigo-500 font-bold w-4">05</span>
+                                <div class="truncate">
+                                    <h4 class="text-xs font-bold text-primary-light dark:text-primary-dark group-hover:text-indigo-600 dark:group-hover:text-indigo-400 truncate">Chopin: Nocturne Op.9, No.2</h4>
+                                    <p class="text-[10px] text-gray-400 truncate">Gentle night song of poetic devotion</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 shrink-0">
+                                <span class="text-[10px] text-gray-400">04:30</span>
+                                <i class="fa-regular fa-circle-play text-gray-400 group-hover:text-indigo-500 transition-colors"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 특성 섹션 (Characteristics Section) -->
+    <section id="traits" class="reveal-element py-20 bg-background-light dark:bg-background-dark z-10">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center md:text-left mb-10">
+                <span class="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-semibold">Characteristics</span>
+                <h2 class="text-xl font-bold text-primary-light dark:text-primary-dark mt-1 drawing-underline pb-1" data-t="sec_traits">나의 특성</h2>
+                <p class="text-xs text-secondary-light dark:text-secondary-dark mt-1" data-t="sec_traits_sub">포장하기보다는 있는 그대로를 전합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 특성 카드 1 (3D 틸트 호버 적용) -->
+                <div class="tilt-card group bg-white dark:bg-cardBg-dark p-6 rounded-2xl border border-gray-100 dark:border-gray-800/80 shadow-sm hover:shadow-md dark:hover:shadow-indigo-950/20 transition-all duration-300 space-y-3">
+                    <div class="w-9 h-9 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg flex items-center justify-center text-indigo-500">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="text-md font-bold text-primary-light dark:text-primary-dark" data-t="trait_1_title">묵묵한 태도</h3>
+                    <p class="text-xs md:text-sm text-secondary-light dark:text-secondary-dark leading-relaxed" data-t="trait_1_desc">
+                        거창한 포장이나 수식어보다는 행동으로 보여주려 노력합니다. 어려운 상황을 마주하더라도 '결국 시간은 흘러간다'는 마음으로 조급함 없이 끝까지 매듭짓습니다.
+                    </p>
+                </div>
+
+                <!-- 특성 카드 2 (3D 틸트 호버 적용) -->
+                <div class="tilt-card group bg-white dark:bg-cardBg-dark p-6 rounded-2xl border border-gray-100 dark:border-gray-800/80 shadow-sm hover:shadow-md dark:hover:shadow-indigo-950/20 transition-all duration-300 space-y-3">
+                    <div class="w-9 h-9 bg-indigo-50 dark:bg-indigo-950/40 rounded-lg flex items-center justify-center text-indigo-500">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h3 class="text-md font-bold text-primary-light dark:text-primary-dark" data-t="trait_2_title">차분하고 솔직함</h3>
+                    <p class="text-xs md:text-sm text-secondary-light dark:text-secondary-dark leading-relaxed" data-t="trait_2_desc">
+                        상대방을 편안하게 대하며 가식 없는 진솔한 대화를 선호합니다. 언제나 한결같고 일관성 있는 태도로 주위 사람들에게 가볍지 않은 묵직한 신뢰감을 전하고자 합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 아코디언 인터랙티브 섹션 (Interactive Story Reveal) -->
+    <section id="reveal" class="reveal-element py-20 bg-white/70 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-900 backdrop-blur-md z-10">
+        <div class="max-w-4xl mx-auto px-6 space-y-12">
+            
+            <div class="text-center max-w-xl mx-auto space-y-3">
+                <span class="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-semibold">Click to Open</span>
+                <h2 class="text-xl font-bold text-primary-light dark:text-primary-dark drawing-underline pb-1" data-t="sec_reveal">클릭하면 보이는 이야기</h2>
+                <p class="text-xs text-secondary-light dark:text-secondary-dark leading-relaxed" data-t="sec_reveal_sub">
+                    조금 더 가까워지면 알 수 있는 소소하고 진심 가득한 이야기들입니다. 카드를 눌러보세요.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                <!-- 인터랙티브 1 -->
+                <div class="flex flex-col">
+                    <button id="btn-secret" class="interactive-target text-left bg-white dark:bg-cardBg-dark hover:bg-gray-50 dark:hover:bg-gray-800/20 border border-gray-100 dark:border-gray-800 p-6 rounded-2xl transition-all duration-300 group shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-bold" data-t="reveal_1_badge">01. 사람들이 잘 모르는 나</span>
+                            <span id="btn-secret-tag" class="text-[9px] text-indigo-500 font-semibold bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md border border-indigo-100/30 dark:border-indigo-900/40" data-t="reveal_1_btn">열어보기</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-primary-light dark:text-primary-dark mb-1" data-t="reveal_1_title">겉으로는 아주 조용해 보이지만...</h4>
+                        <p class="text-xs text-secondary-light dark:text-secondary-dark" data-t="reveal_1_desc">
+                            처음엔 낯을 많이 가릴 뿐, 사실은 조금 다른 모습이 숨어 있습니다.
+                        </p>
+                        
+                        <!-- 아코디언 메시지 -->
+                        <div id="msg-secret" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out">
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 text-center bg-[#FAF9F6] dark:bg-gray-900/60 p-4 rounded-xl">
+                                <p class="text-indigo-600 dark:text-indigo-400 font-bold text-xs md:text-sm" data-t="reveal_1_secret">💬 "사실 가까워지면 말이 아주 많아져요!"</p>
+                                <p class="text-[11px] text-secondary-light dark:text-secondary-dark mt-1" data-t="reveal_1_secret_sub">마음이 편해지면 소소한 이야기도 즐겁게 나누는 인간적인 편입니다.</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- 인터랙티브 2 (플로팅 애니메이션 포함) -->
+                <div class="flex flex-col float-subtle">
+                    <button id="btn-onemore" class="interactive-target text-left bg-white dark:bg-cardBg-dark hover:bg-gray-50 dark:hover:bg-gray-800/20 border border-gray-100 dark:border-gray-800 p-6 rounded-2xl transition-all duration-300 group shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[11px] text-gray-400 dark:text-gray-500 font-bold" data-t="reveal_2_badge">02. One More Thing...</span>
+                            <span id="btn-onemore-tag" class="text-[9px] text-indigo-500 font-semibold bg-indigo-50 dark:bg-indigo-950/50 px-2 py-0.5 rounded-md border border-indigo-100/30 dark:border-indigo-900/40" data-t="reveal_2_btn">열어보기</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-primary-light dark:text-primary-dark mb-1" data-t="reveal_2_title">동기들에게 남기고 싶은 말</h4>
+                        <p class="text-xs text-secondary-light dark:text-secondary-dark" data-t="reveal_2_desc">
+                            이 웹페이지를 마주해 주신 고마운 분들께 건네는 가벼운 메시지입니다.
+                        </p>
+                        
+                        <!-- 아코디언 메시지 -->
+                        <div id="msg-onemore" class="max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out">
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 text-center bg-[#FAF9F6] dark:bg-gray-900/60 p-4 rounded-xl">
+                                <p class="text-emerald-600 dark:text-teal-400 font-bold text-xs md:text-sm" data-t="reveal_2_secret">🤝 "사이좋게 지내요!"</p>
+                                <p class="text-[11px] text-secondary-light dark:text-secondary-dark mt-1" data-t="reveal_2_secret_sub">언제든 먼저 편하게 다가와 주시면 언제든 기쁘겠습니다.</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 방명록 섹션 (Guestbook Section) -->
+    <section id="guestbook" class="reveal-element py-20 bg-background-light dark:bg-background-dark z-10">
+        <div class="max-w-xl mx-auto px-6">
+            <div class="text-center mb-8">
+                <span class="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-semibold">Guestbook</span>
+                <h2 class="text-xl font-bold text-primary-light dark:text-primary-dark mt-1 drawing-underline pb-1" data-t="sec_guestbook">방명록</h2>
+                <p class="text-xs text-secondary-light dark:text-secondary-dark mt-1" data-t="sec_guestbook_sub">이곳을 다녀간 흔적을 남겨주세요. 동기분들의 한마디가 저에게 큰 힘이 됩니다.</p>
+            </div>
+
+            <!-- 입력 폼 카드 -->
+            <div class="bg-white dark:bg-cardBg-dark p-5 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4 mb-6">
+                <form id="guestbook-form" class="space-y-3">
+                    <div>
+                        <input type="text" id="guest-name" name="name" required max="20" class="interactive-target w-full text-xs px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/40 text-primary-light dark:text-primary-dark focus:outline-none focus:border-indigo-400 dark:focus:border-indigo-500" placeholder="이름 또는 닉네임" data-placeholder-t="guestbook_name_placeholder">
+                    </div>
+                    <div>
+                        <textarea id="guest-msg" name="message" required max="200" rows="3" class="interactive-target w-full text-xs px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/40 text-primary-light dark:text-primary-dark focus:outline-none focus:border-indigo-400 dark:focus:border-indigo-500 resize-none" placeholder="따뜻한 한마디를 남겨주세요." data-placeholder-t="guestbook_msg_placeholder"></textarea>
+                    </div>
+                    <button type="submit" class="interactive-target w-full py-2.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-xl transition-all shadow-sm flex items-center justify-center space-x-1.5 active:scale-98">
+                        <i class="fa-regular fa-paper-plane text-[10px]"></i>
+                        <span data-t="guestbook_submit">메시지 남기기</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- 메시지 목록 영역 -->
+            <div id="guestbook-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+                <!-- JavaScript로 방명록 카드 추가됨 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 (Footer with typewriter effect) -->
+    <footer class="bg-gray-50 dark:bg-gray-950 border-t border-gray-100 dark:border-gray-900 py-12 px-6 z-10 relative">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6">
+            <div class="space-y-1">
+                <p class="text-xs md:text-sm font-semibold text-primary-light dark:text-primary-dark" data-t="footer_text">김민준 | 느리지만 꾸준한 사람</p>
+                <p class="text-[10px] text-gray-400 dark:text-gray-500">© 2026 Minjun Kim. All rights reserved.</p>
+            </div>
+            
+            <!-- 타이핑 효과가 나타나는 한 줄 타이틀 (Typewriter container) -->
+            <div class="flex items-center space-x-1.5 h-6">
+                <span id="footer-typewriter" class="text-xs md:text-sm font-medium tracking-wide text-secondary-light dark:text-secondary-dark italic bg-gradient-to-r from-indigo-500 to-teal-400 bg-clip-text text-transparent"></span>
+                <span id="footer-cursor" class="w-[1.5px] h-3.5 bg-indigo-500 dark:bg-indigo-400 animate-pulse"></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 인터랙티브 최적화 스크립트 -->
+    <script>
+        // --- 다국어 번역 사전 정보 ---
+        const translations = {
+            ko: {
+                nav_about: "소개",
+                nav_music: "음악",
+                nav_traits: "특성",
+                nav_guest: "방명록",
+                hero_badge: "Personal Portfolio",
+                hero_title: "안녕하세요! 김민준입니다.",
+                hero_sub: "조급함 대신 묵묵함을 선택하고, 한 걸음씩 앞으로 나아갑니다. 당장 눈에 보이지 않더라도 시간이 쌓여 만드는 단단한 신뢰를 믿습니다.",
+                btn_profile: "프로필 보기",
+                btn_closer: "가까워지기",
+                sec_about: "기본 소개",
+                sec_about_sub: "화려하게 드러내기보다, 조용히 책임을 다하는 것을 편안하게 생각합니다. 마산에 살며 일상의 소박한 균형을 소중히 여깁니다.",
+                profile_name_label: "이름",
+                profile_name_val: "김민준 (00년생)",
+                profile_loc_label: "사는 곳",
+                profile_loc_val: "경남 마산",
+                profile_mbti_label: "성향",
+                profile_mbti_val: "INTP (논리적인 사색가)",
+                profile_major_label: "전공",
+                profile_major_val: "클래식 피아노",
+                sec_music: "전공과 음악 이야기",
+                sec_music_sub: "클래식 피아노를 전공하며 수없이 반복하는 연습 속에서 꾸준함을 몸으로 배웠습니다. 아래는 제가 평소에 깊이 공감하고 즐겨 듣는 피아노 연주들입니다. 마우스로 누르면 음악을 바로 들으실 수 있습니다.",
+                sec_traits: "나의 특성",
+                sec_traits_sub: "포장하기보다는 있는 그대로를 전합니다.",
+                trait_1_title: "묵묵한 태도",
+                trait_1_desc: "거창한 포장이나 수식어보다는 행동으로 보여주려 노력합니다. 어려운 상황을 마주하더라도 '결국 시간은 흘러간다'는 마음으로 조급함 없이 끝까지 매듭짓습니다.",
+                trait_2_title: "차분하고 솔직함",
+                trait_2_desc: "상대방을 편안하게 대하며 가식 없는 진솔한 대화를 선호합니다. 언제나 한결같고 일관성 있는 태도로 주위 사람들에게 가볍지 않은 묵직한 신뢰감을 전하고자 합니다.",
+                sec_reveal: "클릭하면 보이는 이야기",
+                sec_reveal_sub: "조금 더 가까워지면 알 수 있는 소소하고 진심 가득한 이야기들입니다. 카드를 눌러보세요.",
+                reveal_1_badge: "01. 사람들이 잘 모르는 나",
+                reveal_1_btn: "열어보기",
+                reveal_1_btn_close: "닫기",
+                reveal_1_title: "겉으로는 아주 조용해 보이지만...",
+                reveal_1_desc: "처음엔 낯을 많이 가릴 뿐, 사실은 조금 다른 모습이 숨어 있습니다.",
+                reveal_1_secret: "💬 \"사실 가까워지면 말이 아주 많아져요!\"",
+                reveal_1_secret_sub: "마음이 편해지면 소소한 이야기도 즐겁게 나누는 인간적인 편입니다.",
+                reveal_2_badge: "02. One More Thing...",
+                reveal_2_btn: "열어보기",
+                reveal_2_btn_close: "닫기",
+                reveal_2_title: "동기들에게 남기고 싶은 말",
+                reveal_2_desc: "이 웹페이지를 마주해 주신 고마운 분들께 건네는 가벼운 메시지입니다.",
+                reveal_2_secret: "🤝 \"사이좋게 지내요!\"",
+                reveal_2_secret_sub: "언제든 먼저 편하게 다가와 주시면 언제든 기쁘겠습니다.",
+                sec_guestbook: "방명록",
+                sec_guestbook_sub: "이곳을 다녀간 흔적을 남겨주세요. 동기분들의 한마디가 저에게 큰 힘이 됩니다.",
+                guestbook_name_placeholder: "이름 또는 닉네임",
+                guestbook_msg_placeholder: "따뜻한 한마디를 남겨주세요.",
+                guestbook_submit: "메시지 남기기",
+                guestbook_empty: "첫 번째 방명록을 작성해보세요!",
+                footer_text: "김민준 | 느리지만 꾸준한 사람"
+            },
+            en: {
+                nav_about: "About",
+                nav_music: "Music",
+                nav_traits: "Traits",
+                nav_guest: "Guestbook",
+                hero_badge: "Personal Portfolio",
+                hero_title: "Hello! I am Minjun Kim.",
+                hero_sub: "Choosing calm consistency over haste, I move forward step by step. I believe in the solid trust built through the quiet accumulation of time.",
+                btn_profile: "View Profile",
+                btn_closer: "Get Closer",
+                sec_about: "About Me",
+                sec_about_sub: "Instead of standing out, I prefer to take quiet responsibility. Living in Masan, South Korea, I cherish the peaceful balance of daily life.",
+                profile_name_label: "Name",
+                profile_name_val: "Minjun Kim (b. 2000)",
+                profile_loc_label: "Location",
+                profile_loc_val: "Masan, S. Korea",
+                profile_mbti_label: "MBTI",
+                profile_mbti_val: "INTP (Logician)",
+                profile_major_label: "Major",
+                profile_major_val: "Classical Piano",
+                sec_music: "Major & Music Story",
+                sec_music_sub: "Through classical piano, I learned consistency in the countless hours of practice. Below are the piano performances I deeply connect with. Click to listen to each recording.",
+                sec_traits: "Characteristics",
+                sec_traits_sub: "Presenting myself as I am, without grand decorations.",
+                trait_1_title: "Quiet Consistency",
+                trait_1_desc: "I prove myself through steady actions rather than wordy descriptions. Even when facing difficult situations, I finish them without panic, knowing that time always flows.",
+                trait_2_title: "Calm & Genuine",
+                trait_2_desc: "I make people feel comfortable and prefer honest conversations. By staying constant, I build a sense of heavy trust that lingers.",
+                sec_reveal: "Stories Behind Clicks",
+                sec_reveal_sub: "These are small, heartfelt details you will learn once we get a bit closer. Go ahead and click the cards.",
+                reveal_1_badge: "01. What people don't know",
+                reveal_1_btn: "Reveal",
+                reveal_1_btn_close: "Close",
+                reveal_1_title: "I might seem quiet on the outside...",
+                reveal_1_desc: "I am simply a bit shy at first, but there is actually a different side of me.",
+                reveal_1_secret: "💬 \"Actually, I talk a lot once we are close!\"",
+                reveal_1_secret_sub: "Once comfortable, I become highly conversational and friendly.",
+                reveal_2_badge: "02. One More Thing...",
+                reveal_2_btn: "Reveal",
+                reveal_2_btn_close: "Close",
+                reveal_2_title: "Message to classmates",
+                reveal_2_desc: "A warm, lighthearted greeting to all peers visiting this web page.",
+                reveal_2_secret: "🤝 \"Let's get along well!\"",
+                reveal_2_secret_sub: "Please feel free to approach me first anytime – I'll always be glad.",
+                sec_guestbook: "Guestbook",
+                sec_guestbook_sub: "Leave a trace of your visit. Your words mean a lot to me.",
+                guestbook_name_placeholder: "Your Name / Nickname",
+                guestbook_msg_placeholder: "Leave a warm message here...",
+                guestbook_submit: "Post Comment",
+                guestbook_empty: "Be the first to leave a message!",
+                footer_text: "Minjun Kim | Slow but Steady"
+            }
+        };
+
+        let currentLang = 'ko';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 0. 웹 오프닝 애니메이션 트리거 ---
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                triggerHeroTyping();
+            }, 100);
+
+            // --- 1. 다자언어 전환 및 상태 저장 ---
+            const langToggleBtn = document.getElementById('lang-toggle');
+            
+            // 로컬 스토리지에 설정 기록된 언어 로드
+            if (localStorage.language) {
+                currentLang = localStorage.language;
+            } else {
+                // 기본 시스템 언어가 영어인 경우 영어 우선 대응
+                const userLang = navigator.language || navigator.userLanguage;
+                if (userLang.startsWith('en')) currentLang = 'en';
+            }
+            updateLanguageUI();
+
+            langToggleBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'ko' ? 'en' : 'ko';
+                localStorage.language = currentLang;
+                updateLanguageUI();
+                triggerHeroTyping(); // 언어 변경 시 헤더 타이핑 다시 시작
+                renderGuestbook();  // 방명록 리스트 언어 반영
+            });
+
+            function updateLanguageUI() {
+                langToggleBtn.textContent = currentLang === 'ko' ? 'EN' : 'KO';
+                document.documentElement.lang = currentLang;
+
+                // data-t 속성을 가진 엘리먼트 텍스트 일괄 변환
+                document.querySelectorAll('[data-t]').forEach(elem => {
+                    const key = elem.getAttribute('data-t');
+                    if (translations[currentLang][key]) {
+                        elem.textContent = translations[currentLang][key];
+                    }
+                });
+
+                // placeholder 변환
+                document.querySelectorAll('[data-placeholder-t]').forEach(elem => {
+                    const key = elem.getAttribute('data-placeholder-t');
+                    if (translations[currentLang][key]) {
+                        elem.setAttribute('placeholder', translations[currentLang][key]);
+                    }
+                });
+            }
+
+            // --- 2. 테마 전환 기능 (다크모드 / 라이트모드) ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('theme-sun');
+            const moonIcon = document.getElementById('theme-moon');
+
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            });
+
+            // --- 3. 클래식 입자/도트 파티클 배경 그리기 (Canvas 기반) ---
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleSymbols = ['♩', '♪', '♫', '♬', '•', '°'];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // 파티클 생성
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    speedY: 0.15 + Math.random() * 0.35,
+                    speedX: (Math.random() - 0.5) * 0.2,
+                    size: 10 + Math.random() * 12,
+                    opacity: 0.15 + Math.random() * 0.35,
+                    symbol: particleSymbols[Math.floor(Math.random() * particleSymbols.length)]
+                });
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 테마에 맞는 드로잉 색상 선택
+                const isDark = document.documentElement.classList.contains('dark');
+                ctx.fillStyle = isDark ? 'rgba(243, 244, 246, 0.4)' : 'rgba(31, 41, 55, 0.4)';
+
+                particles.forEach(p => {
+                    ctx.font = `${p.size}px Gowun Dodum`;
+                    ctx.save();
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fillText(p.symbol, p.x, p.y);
+                    ctx.restore();
+
+                    // 서서히 떠오르게
+                    p.y -= p.speedY;
+                    p.x += p.speedX;
+
+                    // 화면 최상단 도달 시 최하단으로 재순환
+                    if (p.y < -30) {
+                        p.y = canvas.height + 30;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            // --- 4. 마우스 포인터 가로채기 (Custom Cursor trailing) ---
+            const cursorRing = document.getElementById('custom-cursor');
+            const cursorDot = document.getElementById('custom-cursor-dot');
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let ringX = mouseX;
+            let ringY = mouseY;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            }, { passive: true });
+
+            // 러프(Lerp)를 주어 뒤따라오는 은은한 트레일링 링 연출
+            function animateCursor() {
+                ringX += (mouseX - ringX) * 0.12;
+                ringY += (mouseY - ringY) * 0.12;
+                cursorRing.style.left = ringX + 'px';
+                cursorRing.style.top = ringY + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // 상호작용 가능한 요소 호버 시 음표(♩) 커서 형태로 확대 및 전환
+            const interactiveTargets = document.querySelectorAll('.interactive-target, a, button, input, textarea');
+            interactiveTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => {
+                    cursorRing.style.width = '48px';
+                    cursorRing.style.height = '48px';
+                    cursorRing.style.borderColor = 'rgba(99, 102, 241, 0.9)';
+                    cursorRing.style.backgroundColor = 'rgba(99, 102, 241, 0.05)';
+                    
+                    cursorDot.style.width = '18px';
+                    cursorDot.style.height = '18px';
+                    cursorDot.style.borderRadius = '50%';
+                    cursorDot.style.backgroundColor = '#6366F1';
+                    cursorDot.innerHTML = '<span style="font-size:10px; margin-top:-1px;">♩</span>';
+                });
+
+                target.addEventListener('mouseleave', () => {
+                    cursorRing.style.width = '32px';
+                    cursorRing.style.height = '32px';
+                    cursorRing.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                    cursorRing.style.backgroundColor = 'transparent';
+                    
+                    cursorDot.style.width = '6px';
+                    cursorDot.style.height = '6px';
+                    cursorDot.style.borderRadius = '50%';
+                    cursorDot.style.backgroundColor = '#6366F1';
+                    cursorDot.innerHTML = '';
+                });
+            });
+
+            // --- 5. 3D 원근 틸트 물리 효과 (Tilt Card) ---
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    // 최대 8도 기울임 벡터 연산
+                    const tiltX = (y - centerY) / centerY * -6; 
+                    const tiltY = (x - centerX) / centerX * 6; 
+                    
+                    card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-6px)`;
+                    card.style.shadow = '0 10px 25px -5px rgba(0,0,0,0.1)';
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+                });
+            });
+
+            // --- 6. 상단 스크롤 진행률 & 미동 패럴랙스 구체 배경 ---
+            const progressBar = document.getElementById('progress-bar');
+            const blob1 = document.getElementById('parallax-blob-1');
+            const blob2 = document.getElementById('parallax-blob-2');
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + '%';
+
+                // 미세한 페럴랙스 그라데이션 구체 스크롤 연동
+                if (blob1 && blob2) {
+                    const parallaxOffset = winScroll * 0.12;
+                    blob1.style.transform = `translateY(${parallaxOffset}px)`;
+                    blob2.style.transform = `translateY(${-parallaxOffset * 0.8}px)`;
+                }
+            }, { passive: true });
+
+            // --- 7. 스크롤 등장이벤트 감지 (Intersection Observer) ---
+            const revealElements = document.querySelectorAll('.reveal-element');
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // 푸터 진입 시 하단 서브타이틀 타이핑 동작
+                        if (entry.target.tagName === 'FOOTER') {
+                            triggerFooterTypewriter();
+                        }
+                    }
+                });
+            };
+
+            const revealObserver = new IntersectionObserver(observerCallback, {
+                root: null,
+                threshold: 0.12
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+            
+            const footerEl = document.querySelector('footer');
+            if (footerEl) revealObserver.observe(footerEl);
+
+            // --- 8. 히어로 메인 타이틀 타이핑 이펙트 ---
+            const titleSpan = document.getElementById('hero-title-text');
+            let typingTimeout;
+
+            function triggerHeroTyping() {
+                clearTimeout(typingTimeout);
+                const fullText = translations[currentLang].hero_title;
+                titleSpan.textContent = "";
+                let index = 0;
+
+                function type() {
+                    if (index < fullText.length) {
+                        titleSpan.textContent += fullText.charAt(index);
+                        index++;
+                        typingTimeout = setTimeout(type, 110);
+                    }
+                }
+                type();
+            }
+
+            // --- 9. 푸터 서브 메시지 타이핑 이펙트 ---
+            const footerTypewriter = document.getElementById('footer-typewriter');
+            const footerCursor = document.getElementById('footer-cursor');
+            const textToType = "Slow but Steady.";
+            let footerIndex = 0;
+            let footerTypedStarted = false;
+
+            function triggerFooterTypewriter() {
+                if (footerTypedStarted) return;
+                footerTypedStarted = true;
+                footerTypewriter.textContent = "";
+                
+                function typeLetter() {
+                    if (footerIndex < textToType.length) {
+                        footerTypewriter.textContent += textToType.charAt(footerIndex);
+                        footerIndex++;
+                        setTimeout(typeLetter, 120);
+                    } else {
+                        setTimeout(() => {
+                            footerCursor.style.display = 'none';
+                        }, 2500);
+                    }
+                }
+                setTimeout(typeLetter, 400);
+            }
+
+            // --- 10. 아코디언 확장 애니메이션 ---
+            function setupAccordion(btnId, msgId, tagId, stateKey) {
+                const btn = document.getElementById(btnId);
+                const msg = document.getElementById(msgId);
+                const tag = document.getElementById(tagId);
+
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isClosed = msg.classList.contains('opacity-0');
+
+                    if (isClosed) {
+                        msg.classList.remove('opacity-0');
+                        msg.style.maxHeight = '250px';
+                        msg.style.marginTop = '1.2rem';
+                        tag.textContent = translations[currentLang][stateKey + '_close'] || "닫기";
+                    } else {
+                        msg.classList.add('opacity-0');
+                        msg.style.maxHeight = '0px';
+                        msg.style.marginTop = '0px';
+                        tag.textContent = translations[currentLang][stateKey] || "열어보기";
+                    }
+                });
+            }
+
+            setupAccordion('btn-secret', 'msg-secret', 'btn-secret-tag', 'reveal_1_btn');
+            setupAccordion('btn-onemore', 'msg-onemore', 'btn-onemore-tag', 'reveal_2_btn');
+
+            // --- 11. 영구 저장 로컬스토리지 방명록 시스템 ---
+            const guestbookForm = document.getElementById('guestbook-form');
+            const guestListName = document.getElementById('guest-name');
+            const guestListMsg = document.getElementById('guest-msg');
+            const guestbookList = document.getElementById('guestbook-list');
+
+            // 방명록 리스트 렌더링
+            function renderGuestbook() {
+                guestbookList.innerHTML = '';
+                let entries = [];
+                try {
+                    entries = JSON.parse(localStorage.getItem('minjun_guestbook') || '[]');
+                } catch(e) {
+                    entries = [];
+                }
+
+                if (entries.length === 0) {
+                    guestbookList.innerHTML = `
+                        <div class="text-center py-8 text-gray-400 dark:text-gray-500 text-xs">
+                            <i class="fa-regular fa-comment-dots text-lg mb-2 block"></i>
+                            <span data-t="guestbook_empty">${translations[currentLang].guestbook_empty}</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // 최신순 정렬
+                entries.reverse().forEach((entry, idx) => {
+                    // 클래식 악보 노트를 닮은 카드 생성
+                    const card = document.createElement('div');
+                    card.className = "p-4 rounded-xl bg-white dark:bg-cardBg-dark border border-gray-100 dark:border-gray-800 shadow-sm space-y-1.5 transition-all relative group";
+                    
+                    // 무작위로 은은한 클래식 파스텔 레프트 보더 부여
+                    const borderColors = ['border-l-indigo-400', 'border-l-teal-400', 'border-l-rose-400', 'border-l-amber-400'];
+                    const colorClass = borderColors[idx % borderColors.length];
+                    card.classList.add('border-l-4', colorClass);
+
+                    const dateStr = new Date(entry.timestamp).toLocaleDateString(currentLang === 'ko' ? 'ko-KR' : 'en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-xs text-primary-light dark:text-primary-dark">${escapeHTML(entry.name)}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[9px] text-gray-400">${dateStr}</span>
+                                <button onclick="deleteGuestbookEntry(${entry.id})" class="interactive-target text-[10px] text-gray-300 hover:text-rose-500 transition-colors cursor-none" aria-label="댓글 삭제">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-secondary-light dark:text-secondary-dark leading-relaxed break-all">${escapeHTML(entry.message)}</p>
+                    `;
+                    guestbookList.appendChild(card);
+                });
+            }
+
+            // HTML 이스케이프 처리 (보안 대책)
+            function escapeHTML(str) {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+                );
+            }
+
+            // 댓글 등록 이벤트 핸들러
+            guestbookForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = guestListName.value.trim();
+                const message = guestListMsg.value.trim();
+
+                if (!name || !message) return;
+
+                let entries = [];
+                try {
+                    entries = JSON.parse(localStorage.getItem('minjun_guestbook') || '[]');
+                } catch(e) {
+                    entries = [];
+                }
+
+                const newEntry = {
+                    id: Date.now(),
+                    name: name,
+                    message: message,
+                    timestamp: new Date().toISOString()
+                };
+
+                entries.push(newEntry);
+                localStorage.setItem('minjun_guestbook', JSON.stringify(entries));
+
+                // 폼 리셋
+                guestListName.value = '';
+                guestListMsg.value = '';
+
+                // 리렌더링
+                renderGuestbook();
+            });
+
+            // 삭제 기능 전역 바인딩
+            window.deleteGuestbookEntry = function(id) {
+                let entries = [];
+                try {
+                    entries = JSON.parse(localStorage.getItem('minjun_guestbook') || '[]');
+                } catch(e) {
+                    entries = [];
+                }
+
+                entries = entries.filter(e => e.id !== id);
+                localStorage.setItem('minjun_guestbook', JSON.stringify(entries));
+                renderGuestbook();
+            };
+
+            // 초기 기동 로드
+            renderGuestbook();
+
+        });
+    </script>
+</body>
+</html>
